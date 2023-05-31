@@ -1,16 +1,12 @@
 const std = @import("std");
 const string = []const u8;
-const http = @import("apple_pie");
 
 pub const Jar = std.StringHashMap(string);
 
-pub fn parse(alloc: std.mem.Allocator, headers: http.Request.Headers) !Jar {
+pub fn parse(alloc: std.mem.Allocator, headers: std.http.Headers) !Jar {
     var map = Jar.init(alloc);
-    // extra check caused by https://github.com/Luukdegram/apple_pie/issues/70
-    const h = headers.get("Cookie") orelse headers.get("cookie");
-    if (h == null) return map;
-
-    var iter = std.mem.split(u8, h.?, ";");
+    const h = headers.getFirstValue("cookie") orelse return map;
+    var iter = std.mem.split(u8, h, ";");
     while (iter.next()) |item| {
         const i = std.mem.indexOfScalar(u8, item, '=');
         if (i == null) continue;
@@ -23,6 +19,6 @@ pub fn parse(alloc: std.mem.Allocator, headers: http.Request.Headers) !Jar {
     return map;
 }
 
-pub fn delete(response: *http.Response, comptime name: string) !void {
-    try response.headers.put("Set-Cookie", name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+pub fn delete(response: *std.http.Server.Response, comptime name: string) !void {
+    try response.headers.append("Set-Cookie", name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
 }

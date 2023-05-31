@@ -3,4 +3,3 @@ name: cookies
 main: cookies.zig
 license: MIT
 dependencies:
-  - src: git https://github.com/Luukdegram/apple_pie
