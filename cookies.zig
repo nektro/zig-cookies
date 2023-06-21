@@ -6,7 +6,7 @@ pub const Jar = std.StringHashMap(string);
 pub fn parse(alloc: std.mem.Allocator, headers: std.http.Headers) !Jar {
     var map = Jar.init(alloc);
     const h = headers.getFirstValue("cookie") orelse return map;
-    var iter = std.mem.split(u8, h, ";");
+    var iter = std.mem.split(u8, h, "; ");
     while (iter.next()) |item| {
         const i = std.mem.indexOfScalar(u8, item, '=');
         if (i == null) continue;
