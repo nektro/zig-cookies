@@ -3,9 +3,9 @@ const string = []const u8;
 
 pub const Jar = std.StringHashMap(string);
 
-pub fn parse(alloc: std.mem.Allocator, headers: std.http.Headers) !Jar {
+pub fn parse(alloc: std.mem.Allocator, cookie_str: ?string) !Jar {
     var map = Jar.init(alloc);
-    const h = headers.getFirstValue("cookie") orelse return map;
+    const h = cookie_str orelse return map;
     var iter = std.mem.split(u8, h, "; ");
     while (iter.next()) |item| {
         const i = std.mem.indexOfScalar(u8, item, '=');
@@ -19,6 +19,6 @@ pub fn parse(alloc: std.mem.Allocator, headers: std.http.Headers) !Jar {
     return map;
 }
 
-pub fn delete(response: *std.http.Server.Response, comptime name: string) !void {
-    try response.headers.append("Set-Cookie", name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT");
+pub fn delete_string(comptime name: string) string {
+    return name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
