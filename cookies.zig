@@ -19,6 +19,19 @@ pub fn parse(alloc: std.mem.Allocator, cookie_str: ?string) !Jar {
     return map;
 }
 
+pub fn get(cookie_str: ?string, name: string) ?string {
+    const h = cookie_str orelse return null;
+    var iter = std.mem.split(u8, h, "; ");
+    while (iter.next()) |item| {
+        const i = std.mem.indexOfScalar(u8, item, '=');
+        if (i == null) continue;
+        const k = item[0..i.?];
+        const v = item[i.? + 1 ..];
+        if (std.mem.eql(u8, k, name)) return v;
+    }
+    return null;
+}
+
 pub fn delete_string(comptime name: string) string {
     return name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
