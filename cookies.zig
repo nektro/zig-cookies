@@ -6,7 +6,7 @@ pub const Jar = std.StringHashMap(string);
 pub fn parse(alloc: std.mem.Allocator, cookie_str: ?string) !Jar {
     var map = Jar.init(alloc);
     const h = cookie_str orelse return map;
-    var iter = std.mem.split(u8, h, "; ");
+    var iter = std.mem.splitSequence(u8, h, "; ");
     while (iter.next()) |item| {
         const i = std.mem.indexOfScalar(u8, item, '=');
         if (i == null) continue;
@@ -21,7 +21,7 @@ pub fn parse(alloc: std.mem.Allocator, cookie_str: ?string) !Jar {
 
 pub fn get(cookie_str: ?string, name: string) ?string {
     const h = cookie_str orelse return null;
-    var iter = std.mem.split(u8, h, "; ");
+    var iter = std.mem.splitSequence(u8, h, "; ");
     while (iter.next()) |item| {
         const i = std.mem.indexOfScalar(u8, item, '=');
         if (i == null) continue;
