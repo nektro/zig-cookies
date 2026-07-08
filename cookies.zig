@@ -33,5 +33,5 @@ pub fn get(cookie_str: ?string, name: string) ?string {
 }
 
 pub fn delete_string(comptime name: string) string {
-    return name ++ "=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    return name ++ "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
