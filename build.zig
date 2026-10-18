@@ -2,7 +2,7 @@ const std = @import("std");
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
-    const mode = b.option(std.builtin.OptimizeMode, "mode", "") orelse .Debug;
+    const standardize = b.standardOptimizeOption(.{});
     const disable_llvm = b.option(bool, "disable_llvm", "use the non-llvm zig codegen") orelse false;
 
     const mod = b.addModule("cookies", .{ .root_source_file = b.path("cookies.zig") });
@@ -11,7 +11,7 @@ pub fn build(b: *std.Build) void {
         .root_module = b.createModule(.{
             .root_source_file = b.path("test.zig"),
             .target = target,
-            .optimize = mode,
+            .optimize = standardize,
         }),
     });
     tests.root_module.addImport("cookies", mod);

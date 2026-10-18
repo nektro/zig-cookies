@@ -1,0 +1,8 @@
+.{
+    .name = .zig_cookies,
+    .version = "0.0.1",
+    .dependencies = .{},
+    .minimum_zig_version = "0.17.0",
+    .paths = .{""},
+    .fingerprint = 0xccc5ad849dfa2809,
+}
